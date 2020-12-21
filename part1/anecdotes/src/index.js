@@ -9,9 +9,9 @@ const App = (props) => {
   const setToSelected = newValue => {
     setSelected(newValue % anecdotes.length)
   }
-  const setAddVotes = newValue => {
+  const addVote = index => {
     const copy = [ ...votes ]
-    copy[newValue] += 1
+    copy[index] += 1
     setVotes(copy)
     setMaxIndex(copy.indexOf(Math.max(...copy)))
   }
@@ -30,7 +30,7 @@ const App = (props) => {
       <button onClick={() => setToSelected(selected + 1)}>
         next anecdote
       </button>
-      <button onClick={() => setAddVotes(selected)}>
+      <button onClick={() => addVote(selected)}>
         vote
       </button>
       <h1>
