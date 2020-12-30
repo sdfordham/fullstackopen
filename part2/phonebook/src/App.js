@@ -1,13 +1,36 @@
 import React, { useState } from 'react'
 
+const Filter = (props) => {
+  return (
+    <div>
+      filter shown with <input value={props.value} onChange={props.onChange}/>
+  </div>
+  )
+}
+
+const PersonForm = (props) => {
+  return (
+    <form onSubmit={props.formSubmit}>
+      <div>
+        name: <input value={props.nameValue} onChange={props.nameOnChange}/>
+      </div>
+      <div>
+        number: <input value={props.numberValue} onChange={props.numberOnchange}/>
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
+}
+
 const Numbers = (props) => {
   const search = props.search
-  var persons = props.persons.filter(
-    person => person.name.toLowerCase().includes(search.toLowerCase())
+  var persons = props.persons.filter(person =>
+    person.name.toLowerCase().includes(search.toLowerCase())
   )
   return (
     <div>
-      <h2>Numbers</h2>
       <ul>
         {persons.map(person =>
           <li key={person.name}>{person.name} {person.number}</li>)
@@ -24,7 +47,7 @@ const App = () => {
     { name: 'Dan Abramov', number: '12-43-234345' },
     { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ])
-  const [Filter, setFilter] = useState('') 
+  const [_filter, setFilter] = useState('') 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
@@ -60,22 +83,22 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <div>
-        filter shown with <input value={Filter} onChange={handleFilterChange}/>
-      </div>
-      <h2>add a new</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <Numbers search={Filter} persons={persons} />
+
+      <Filter value={_filter} onChange={handleFilterChange} />
+
+      <h2>Add a new</h2>
+
+      <PersonForm
+        formSubmit={addName}
+        nameValue={newName}
+        nameOnChange={handleNameChange}
+        numberValue={newNumber}
+        numberOnchange={handleNumberChange}
+      />
+
+      <h2>Numbers</h2>
+      
+      <Numbers search={_filter} persons={persons} />
     </div>
   )
 }
