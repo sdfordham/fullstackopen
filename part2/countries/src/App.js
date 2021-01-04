@@ -9,8 +9,13 @@ const Filter = (props) => {
   )
 }
 
-const Countries = (props) => {
+const CountryList = (props) => {
   const [showProfile, setShowProfile] = useState([])
+  if (props.search === '') {
+    return (
+      <div></div>
+    )
+  }
   const onClick = (country) => {
     if(showProfile.indexOf(country.name) >= 0) {
       setShowProfile(showProfile.filter(el => el !== country.name))
@@ -26,7 +31,14 @@ const Countries = (props) => {
   if(countries.length === 1) {
     return (
       <div>
-        <Profile data={countries[0]}/>
+        <Profile country={countries[0]}/>
+      </div>
+    )
+  }
+  else if (countries.length > 10) {
+    return (
+      <div>
+        <p>Too many matches.</p>
       </div>
     )
   }
@@ -37,7 +49,7 @@ const Countries = (props) => {
           {countries.map(country =>
             <li key={country.name}>
               {country.name} <input type="submit" value="show" onClick={() => onClick(country)} />
-              {showProfile.indexOf(country.name) >= 0 ? <Profile data={country}/> : null}
+              {showProfile.indexOf(country.name) >= 0 ? <Profile country={country}/> : null}
             </li>)
           }
         </ul>
@@ -47,8 +59,16 @@ const Countries = (props) => {
 }
 
 const Profile = (props) => {
-  const country = props.data
-  console.log(country)
+  return (
+    <div>
+      <CountryInfo country={props.country} />
+      <WeatherInfo city={props.country.capital} />
+    </div>
+  )
+}
+
+const CountryInfo = (props) => {
+  const country = props.country
   return (
     <div>
       <h1>{country.name}</h1>
@@ -61,6 +81,26 @@ const Profile = (props) => {
       }
       </ul>
       <img src={country.flag} alt="Country flag" width="150"></img>
+    </div>
+  )
+}
+
+const WeatherInfo = (props) => {
+  const [weather, setWeather] = useState('')
+  const url = 'http://api.weatherstack.com/current?access_key='
+  + process.env.REACT_APP_API_KEY + '&query=' + props.city
+
+  useEffect(() => {
+    axios.get(url)
+         .then(response => {setWeather(response.data)})
+  }, [url])
+
+  return (
+    <div>
+      <p>Weather in {props.city}</p>
+      <p><b>Temperature:</b> {weather.current.temperature} celsius</p>
+      <img src={weather.current.weather_icons[0]} alt="Country flag" width="150"></img>
+      <p><b>Wind:</b> {weather.current.wind_speed} mph direction {weather.current.wind_dir}</p>
     </div>
   )
 }
@@ -81,7 +121,7 @@ const App = () => {
   return (
     <div>
       <Filter value={_filter} onChange={handleFilterChange} />
-      <Countries search={_filter} data={data} />
+      <CountryList search={_filter} data={data} />
     </div>
   )
 }
