@@ -10,6 +10,15 @@ const Filter = (props) => {
 }
 
 const Countries = (props) => {
+  const [showProfile, setShowProfile] = useState([])
+  const onClick = (country) => {
+    if(showProfile.indexOf(country.name) >= 0) {
+      setShowProfile(showProfile.filter(el => el !== country.name))
+    }
+    else {
+      setShowProfile([...showProfile, country.name])
+    }
+  }
   const search = props.search
   const countries = props.data.filter(country =>
     country.name.toLowerCase().includes(search.toLowerCase())
@@ -26,7 +35,10 @@ const Countries = (props) => {
       <div>
         <ul>
           {countries.map(country =>
-            <li key={country.name}>{country.name}</li>)
+            <li key={country.name}>
+              {country.name} <input type="submit" value="show" onClick={() => onClick(country)} />
+              {showProfile.indexOf(country.name) >= 0 ? <Profile data={country}/> : null}
+            </li>)
           }
         </ul>
       </div>
