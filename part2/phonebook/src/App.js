@@ -51,7 +51,7 @@ const App = () => {
     axios.get('http://localhost:3001/persons')
          .then(response => {setPersons(response.data)})
   }, [])
-
+  
   const addName = (event) => {
     event.preventDefault()
     const names = persons.map((person) => person.name)
@@ -59,10 +59,10 @@ const App = () => {
       window.alert(newName + ' is already added to phonebook.')
     }
     else {
-      setPersons(persons.concat(
-        { name: newName, number: newNumber}
-        )
-      )
+      const newPerson = {name: newName, number: newNumber}
+      setPersons(persons.concat(newPerson))
+      axios.post('http://localhost:3001/persons', newPerson)
+           .then(response => {console.log(response)})
       setNewName('')
       setNewNumber('')
     }
