@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import phoneService from './services/phonebook'
 
-const Message = ({ message }) => {
+const Message = ({ message , error = false}) => {
   if (message === null) {
     return null
   }
-  return (
-    <div className="success">
-      {message}
-    </div>
-  )
+  if (error) {
+    return (
+      <div className="error">
+        {message}
+      </div>
+    )
+  }
+  else {
+    return (
+      <div className="success">
+        {message}
+      </div>
+    )
+  }
 }
 
 const Filter = (props) => {
@@ -89,6 +98,10 @@ const Delete = (props) => {
   const handleDelete = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
     phoneService.remove(person.id)
+                .catch(error => {
+                  props.setMessage(`${person.name} already deleted.`, true)
+                  setTimeout(() => {props.setMessage(null)}, 5000)
+                })
     props.setPersons(props.persons.filter(el => el !== person))
     }
   }
@@ -111,7 +124,8 @@ const Numbers = (props) => {
             {person.name} {person.number} <Delete
                                            id={person.id}
                                            persons={props.persons}
-                                           setPersons={props.setPersons} />
+                                           setPersons={props.setPersons}
+                                           setMessage={props.setMessage} />
           </li>
         )}
       </ul>
@@ -143,7 +157,7 @@ const App = () => {
 
       <h2>Numbers</h2>
        
-      <Numbers persons={persons} setPersons={setPersons} filter={filter} />
+      <Numbers persons={persons} setPersons={setPersons} filter={filter} setMessage={setMessage} />
     </div>
   )
 }
