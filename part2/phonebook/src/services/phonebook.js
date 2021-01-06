@@ -12,5 +12,10 @@ const create = newPerson => {
 const remove = id => {
     return axios.delete(baseUrl + '/' + id)
 }
-const phoneService = {getAll, create, remove}
+
+const update = person => {
+    return axios.put(baseUrl + '/' + person.id, person)
+}
+
+const phoneService = {getAll, create, remove, update}
 export default phoneService

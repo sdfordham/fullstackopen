@@ -19,7 +19,18 @@ const PersonForm = (props) => {
     event.preventDefault()
     const names = props.persons.map((person) => person.name)
     if(names.indexOf(newName) >= 0) {
-      window.alert(newName + ' is already added to phonebook.')
+      if (window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+        )) {
+        const toUpdate = props.persons.find(el => el.name === newName)
+        toUpdate['number'] = newNumber
+        phoneService.update(toUpdate)
+        props.setPersons(
+          props.persons.map(el => el.name === toUpdate.name ? toUpdate : el)
+        )
+        setNewName('')
+        setNewNumber('')
+      }
     }
     else {
       const newPerson = {name: newName, number: newNumber}
@@ -63,16 +74,12 @@ const Delete = (props) => {
   const handleDelete = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
     phoneService.remove(person.id)
-                .then(response => {console.log(response)})
     props.setPersons(props.persons.filter(el => el !== person))
     }
   }
   const toDelete = props.persons.find(el => el.id === props.id)
   return (
-    <button
-     type="submit"
-     key={props.id}
-     onClick={() => handleDelete(toDelete)}>Delete</button>
+    <button type="submit" onClick={() => handleDelete(toDelete)}>Delete</button>
   )
 }
 
