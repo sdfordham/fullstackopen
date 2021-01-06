@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import phoneService from './services/phonebook'
 
+const Message = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="success">
+      {message}
+    </div>
+  )
+}
+
 const Filter = (props) => {
   const handleFilterChange = (event) => {
     props.setFilter(event.target.value)
@@ -28,6 +39,8 @@ const PersonForm = (props) => {
         props.setPersons(
           props.persons.map(el => el.name === toUpdate.name ? toUpdate : el)
         )
+        props.setMessage(`Number changed for ${newName}`)
+        setTimeout(() => {props.setMessage(null)}, 5000)
         setNewName('')
         setNewNumber('')
       }
@@ -42,6 +55,8 @@ const PersonForm = (props) => {
                       )
                     )
                   })
+      props.setMessage(`Added ${newName}`)
+      setTimeout(() => {props.setMessage(null)}, 5000)
       setNewName('')
       setNewNumber('')
     }
@@ -107,6 +122,7 @@ const Numbers = (props) => {
 const App = () => {
   const [persons, setPersons] = useState([])
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     phoneService.getAll()
@@ -117,11 +133,13 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
 
+      <Message message={message} />
+
       <Filter filter={filter} setFilter={setFilter} />
 
       <h2>Add a new</h2>
 
-      <PersonForm persons={persons} setPersons={setPersons} />
+      <PersonForm persons={persons} setPersons={setPersons} setMessage={setMessage} />
 
       <h2>Numbers</h2>
        
