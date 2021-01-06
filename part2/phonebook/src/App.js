@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import personService from './services/phonebook'
+import phoneService from './services/phonebook'
 
 const Filter = (props) => {
   const handleFilterChange = (event) => {
@@ -7,8 +7,8 @@ const Filter = (props) => {
   }
   return (
     <div>
-      filter shown with <input value={props.value} onChange={handleFilterChange}/>
-  </div>
+      filter shown with <input value={props.filter} onChange={handleFilterChange}/>
+    </div>
   )
 }
 
@@ -23,9 +23,14 @@ const PersonForm = (props) => {
     }
     else {
       const newPerson = {name: newName, number: newNumber}
-      props.setPersons(props.persons.concat(newPerson))
-      personService.create(newPerson)
-                   .then(response => {console.log(response)})
+      phoneService.create(newPerson)
+                  .then(response => {
+                    props.setPersons(
+                      props.persons.concat(
+                        {...newPerson, id: response.data.id}
+                      )
+                    )
+                  })
       setNewName('')
       setNewNumber('')
     }
@@ -54,17 +59,39 @@ const PersonForm = (props) => {
   )
 }
 
-const Numbers = (props) => {
-  const search = props.search
-  var persons = props.persons.filter(person =>
-    person.name.toLowerCase().includes(search.toLowerCase())
+const Delete = (props) => {
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+    phoneService.remove(person.id)
+                .then(response => {console.log(response)})
+    props.setPersons(props.persons.filter(el => el !== person))
+    }
+  }
+  const toDelete = props.persons.find(el => el.id === props.id)
+  return (
+    <button
+     type="submit"
+     key={props.id}
+     onClick={() => handleDelete(toDelete)}>Delete</button>
   )
+}
+
+const Numbers = (props) => {
+  var persons = props.persons.filter(person =>
+    person.name.toLowerCase().includes(props.filter.toLowerCase())
+  )
+
   return (
     <div>
       <ul>
         {persons.map(person =>
-          <li key={person.name}>{person.name} {person.number}</li>)
-        }
+          <li key={person.name}>
+            {person.name} {person.number} <Delete
+                                           id={person.id}
+                                           persons={props.persons}
+                                           setPersons={props.setPersons} />
+          </li>
+        )}
       </ul>
     </div>
   )
@@ -75,15 +102,15 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    personService.getAll()
-                 .then(response => {setPersons(response.data)})
+    phoneService.getAll()
+                .then(response => {setPersons(response.data)})
   }, [])
 
   return (
     <div>
       <h1>Phonebook</h1>
 
-      <Filter value={filter} setFilter={setFilter} />
+      <Filter filter={filter} setFilter={setFilter} />
 
       <h2>Add a new</h2>
 
@@ -91,7 +118,7 @@ const App = () => {
 
       <h2>Numbers</h2>
        
-      <Numbers persons={persons} search={filter} />
+      <Numbers persons={persons} setPersons={setPersons} filter={filter} />
     </div>
   )
 }
