@@ -2,21 +2,50 @@ import React, { useState, useEffect } from 'react'
 import personService from './services/phonebook'
 
 const Filter = (props) => {
+  const handleFilterChange = (event) => {
+    props.setFilter(event.target.value)
+  }
   return (
     <div>
-      filter shown with <input value={props.value} onChange={props.onChange}/>
+      filter shown with <input value={props.value} onChange={handleFilterChange}/>
   </div>
   )
 }
 
 const PersonForm = (props) => {
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const addName = (event) => {
+    event.preventDefault()
+    const names = props.persons.map((person) => person.name)
+    if(names.indexOf(newName) >= 0) {
+      window.alert(newName + ' is already added to phonebook.')
+    }
+    else {
+      const newPerson = {name: newName, number: newNumber}
+      props.setPersons(props.persons.concat(newPerson))
+      personService.create(newPerson)
+                   .then(response => {console.log(response)})
+      setNewName('')
+      setNewNumber('')
+    }
+  }
+
+  const handleNameChange = (event) => {
+    setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  }
+
   return (
-    <form onSubmit={props.formSubmit}>
+    <form onSubmit={addName}>
       <div>
-        name: <input value={props.nameValue} onChange={props.nameOnChange}/>
+        name: <input value={newName} onChange={handleNameChange}/>
       </div>
       <div>
-        number: <input value={props.numberValue} onChange={props.numberOnchange}/>
+        number: <input value={newNumber} onChange={handleNumberChange}/>
       </div>
       <div>
         <button type="submit">add</button>
@@ -43,63 +72,26 @@ const Numbers = (props) => {
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [_filter, setFilter] = useState('') 
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
     personService.getAll()
                  .then(response => {setPersons(response.data)})
   }, [])
-  
-  const addName = (event) => {
-    event.preventDefault()
-    const names = persons.map((person) => person.name)
-    if(names.indexOf(newName) >= 0) {
-      window.alert(newName + ' is already added to phonebook.')
-    }
-    else {
-      const newPerson = {name: newName, number: newNumber}
-      setPersons(persons.concat(newPerson))
-      personService.create(newPerson)
-                   .then(response => {console.log(response)})
-      setNewName('')
-      setNewNumber('')
-    }
-  }
-
-  const handleNameChange = (event) => {
-    console.log(event.target.value)
-    setNewName(event.target.value)
-  }
-
-  const handleNumberChange = (event) => {
-    setNewNumber(event.target.value)
-  }
-
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value)
-  }
 
   return (
     <div>
       <h1>Phonebook</h1>
 
-      <Filter value={_filter} onChange={handleFilterChange} />
+      <Filter value={filter} setFilter={setFilter} />
 
       <h2>Add a new</h2>
 
-      <PersonForm
-        formSubmit={addName}
-        nameValue={newName}
-        nameOnChange={handleNameChange}
-        numberValue={newNumber}
-        numberOnchange={handleNumberChange}
-      />
+      <PersonForm persons={persons} setPersons={setPersons} />
 
       <h2>Numbers</h2>
-      
-      <Numbers search={_filter} persons={persons} />
+       
+      <Numbers persons={persons} search={filter} />
     </div>
   )
 }
