@@ -86,23 +86,32 @@ const CountryInfo = (props) => {
 }
 
 const WeatherInfo = (props) => {
-  const [weather, setWeather] = useState('')
-  const url = 'http://api.weatherstack.com/current?access_key='
-  + process.env.REACT_APP_API_KEY + '&query=' + props.city
+  const [weather, setWeather] = useState()
 
   useEffect(() => {
+    const url = 'http://api.weatherstack.com/current?access_key='
+    + process.env.REACT_APP_API_KEY + '&query=' + props.city
     axios.get(url)
-         .then(response => {setWeather(response.data)})
-  }, [url])
+         .then(response => {
+           setWeather(response.data)})
+    }, [setWeather, props.city])
+  
 
-  return (
-    <div>
-      <p>Weather in {props.city}</p>
-      <p><b>Temperature:</b> {weather.current.temperature} celsius</p>
-      <img src={weather.current.weather_icons[0]} alt="Country flag" width="150"></img>
-      <p><b>Wind:</b> {weather.current.wind_speed} mph direction {weather.current.wind_dir}</p>
-    </div>
-  )
+  if (weather === undefined) {
+    return (
+      <div>Loading...</div>
+    )
+  }
+  else {
+    return (
+      <div>
+        <p>Weather in {props.city}</p>
+        <p><b>Temperature:</b> {weather.current.temperature} celsius</p>
+        <img src={weather.current.weather_icons[0]} alt="Country flag" width="150"></img>
+        <p><b>Wind:</b> {weather.current.wind_speed} mph direction {weather.current.wind_dir}</p>
+      </div>
+    )
+  }
 }
 
 const App = () => {
