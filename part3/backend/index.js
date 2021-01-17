@@ -36,6 +36,24 @@ function getRandomInt(max) {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
+  if (!body.name) {
+    return response.status(400).json({ 
+      error: 'name missing.' 
+    })
+  }
+  else if(!body.number) {
+    return response.status(400).json({ 
+      error: 'number missing.' 
+    })
+  }
+
+  const idx = persons.find(person => person.name == body.name)
+  if (idx !== undefined) {
+    return response.status(400).json({ 
+      error: 'name must be unique.' 
+    })
+  }
+
   const person = {
     id: getRandomInt(100000),
     name: body.name,
