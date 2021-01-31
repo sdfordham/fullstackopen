@@ -35,10 +35,7 @@ function addPerson(pw, name, number) {
     number: number
   })
   
-  person.save().then(result => {
-    console.log('Person saved!')
-    mongoose.connection.close()
-  })
+  person.save().then(mongoose.connection.close())
 }
 
 function getAllPersons(pw) {

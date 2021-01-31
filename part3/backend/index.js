@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(cors())
 
 morgan.token('body',
-  function (req, res) {
+  function (req) {
     return JSON.stringify(req.body)
   }
 )
@@ -60,18 +60,16 @@ app.post('/api/persons', (request, response, next) => {
   })
 
   person.save()
-        .then(savedPerson => {
-          response.json(savedPerson)
-        })
-        .catch(error => next(error))
+    .then(savedPerson => {
+      response.json(savedPerson)
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-        .then(result => {
-          response.status(204).end()
-        })
-        .catch(error => next(error))
+    .then(response.status(204).end())
+    .catch(error => next(error))
 })
 
 const errorHandler = (error, request, response, next) => {
@@ -84,14 +82,6 @@ const errorHandler = (error, request, response, next) => {
 }
 
 app.use(errorHandler)
-
-app.get('/info', (request, response) => {
-    const info = "<div>\
-                    <p>Phonebook has info for " +  persons.length + " people.</p>\
-                    <p>" + Date().toLocaleString() + "</p>\
-                  </div>"
-    response.send(info)
-})
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
