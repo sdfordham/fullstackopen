@@ -1,0 +1,63 @@
+GET http://localhost:3003/api/blogs
+
+###
+POST http://localhost:3003/api/blogs HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Testing 123",
+    "author": "Joe John Smith",
+    "url": "www.foo.com",
+    "likes": 5
+}
+
+###
+DELETE http://localhost:3003/api/blogs/602efaad296f4d1ec8572c71
+
+###
+PATCH http://localhost:3003/api/blogs/602427d8348a7d0ea0f54f21 HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Testing 123",
+    "author": "Joe Smith",
+    "url": "www.foo.com",
+    "likes": 5
+}
+
+###
+POST http://localhost:3003/api/users HTTP/1.1
+content-type: application/json
+
+{
+    "username": "Bobby",
+    "name": "Bob",
+    "password": "341"
+}
+
+###
+GET http://localhost:3003/api/users
+
+###
+DELETE http://localhost:3003/api/users/602ef0827022e108b0a978b8
+
+###
+POST http://localhost:3003/api/login/
+content-type: application/json
+
+{
+    "username": "Bobby",
+    "password": "341"
+}
+
+###
+POST http://localhost:3003/api/blogs HTTP/1.1
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJvYmJ5IiwiaWQiOiI2MDJmMGZhMWFlYWQxOTIzYWNhZTA1YzMiLCJpYXQiOjE2MTM2OTY5NzB9.7h0JHdNfO4J_EphVp7fDKdYVJ26xzR3TYZ
+
+{
+    "title": "Testing 123456",
+    "author": "Mike Smith",
+    "url": "www.foo-bar.com",
+    "likes": 5
+}
