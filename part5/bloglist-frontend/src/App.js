@@ -78,15 +78,25 @@ const App = () => {
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
-    </div>  
+    </div>
   )
+
+  const logoutUser = (event) => {
+    event.preventDefault()
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
+  }
 
   return (
     <div>
       <h1>Blogs</h1>
       <Notification message={errorMessage}/>
-      {user === null && loginForm()}
-      {user !== null && blogList()}
+      {user === null ? loginForm() :
+        <div>
+          <p>{user.username} logged in.</p>
+          <button type="submit" onClick={logoutUser}>logout</button>
+          {blogList()}
+        </div>}
     </div>
   )
 }
