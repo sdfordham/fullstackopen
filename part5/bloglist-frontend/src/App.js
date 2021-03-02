@@ -33,12 +33,14 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
     try {
       const user = await loginService.login({
         username, password,
       })
-
+      setErrorMessage('Successfully logged in.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
       ) 
@@ -47,14 +49,14 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setErrorMessage('Wrong username or password.')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     }
   }
 
-  const handleAddBlog = (event) => {
+  const handleAddBlog = async (event) => {
     event.preventDefault()
     const newBlog = {
       "title": newBlogTitle,
@@ -62,11 +64,27 @@ const App = () => {
       "url": newBlogURL,
       "likes": 0
     }
-    blogService.create(newBlog)
-    setBlogs([...blogs, newBlog])
-    setNewBlogTitle('')
-    setNewBlogAuthor('')
-    setNewBlogURL('')
+    try {
+      await blogService.create(newBlog)
+      setErrorMessage(`A new blog ${newBlog.title} by ${newBlog.author} was added.`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+
+      setBlogs([...blogs, newBlog])
+      setNewBlogTitle('')
+      setNewBlogAuthor('')
+      setNewBlogURL('')
+      setErrorMessage('A new blog ${}')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setErrorMessage('Couldnt add that blog.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
 
   const handleTitleChange = (event) => {
@@ -87,8 +105,7 @@ const App = () => {
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
-        username
-        <input
+        Username: <input
         type="text"
         value={username}
         name="Username"
@@ -96,15 +113,14 @@ const App = () => {
         />
       </div>
       <div>
-        password
-        <input
+        Password: <input
         type="password"
         value={password}
         name="Password"
         onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+        <button type="submit">login</button>
     </form>      
   )
 
