@@ -24,7 +24,7 @@ const App = () => {
   }, [])
 
   console.log(blogs)
- 
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
@@ -46,7 +46,7 @@ const App = () => {
       }, 5000)
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
-      ) 
+      )
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -62,10 +62,10 @@ const App = () => {
   const handleAddBlog = async (event) => {
     event.preventDefault()
     const newBlog = {
-      "title": newBlogTitle,
-      "author": newBlogAuthor,
-      "url": newBlogURL,
-      "likes": 0
+      'title': newBlogTitle,
+      'author': newBlogAuthor,
+      'url': newBlogURL,
+      'likes': 0
     }
     try {
       await blogService.create(newBlog)
@@ -110,18 +110,18 @@ const App = () => {
     <div>
       <h2>Create new</h2>
       <form onSubmit={handleAddBlog}>
-      <div>
-        Title: <input value={newBlogTitle} onChange={handleTitleChange} />
-      </div>
-      <div>
-        Author: <input value={newBlogAuthor} onChange={handleAuthorChange} />
-      </div>
-      <div>
-        URL: <input value={newBlogURL} onChange={handleURLChange} />
-      </div>
-      <button type="submit">create</button>
+        <div>
+          Title: <input value={newBlogTitle} onChange={handleTitleChange} />
+        </div>
+        <div>
+          Author: <input value={newBlogAuthor} onChange={handleAuthorChange} />
+        </div>
+        <div>
+          URL: <input value={newBlogURL} onChange={handleURLChange} />
+        </div>
+        <button type="submit">create</button>
       </form>
-    </div> 
+    </div>
   )
 
 
@@ -137,14 +137,14 @@ const App = () => {
       <h1>Blogs</h1>
       <Notification message={errorMessage}/>
       {user === null ? <Loginform username={username}
-                                  password={password}
-                                  setUsername={setUsername}
-                                  setPassword={setPassword}
-                                  handleLogin={handleLogin}/> :
+        password={password}
+        setUsername={setUsername}
+        setPassword={setPassword}
+        handleLogin={handleLogin}/> :
         <div>
           <p>{user.username} logged in.</p>
           <button type="submit" onClick={logoutUser}>logout</button>
-          <Togglable buttonLabel={"New note"} ref={blogFormRef}>
+          <Togglable buttonLabel={'New note'} ref={blogFormRef}>
             {blogForm()}
           </Togglable>
           <BlogList blogs={blogs}/>
