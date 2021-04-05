@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BlogList = ({ blogs }) => {
+export const BlogList = ({ blogs }) => {
   return (
     <div>
       {blogs.map(blog =>
@@ -10,10 +10,10 @@ const BlogList = ({ blogs }) => {
   )
 }
 
-const Blog = ({ blog }) => (
-  <div className='blog'>
-    {blog.title} {blog.author}
-  </div>
-)
-
-export default BlogList
+export const Blog = ({ blog }) => {
+  return (
+    <div className='blog'>
+      {blog.title} {blog.author}
+    </div>
+  )
+}
