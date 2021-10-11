@@ -9,7 +9,7 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-const tokenProcessor = (request, response, next) => {
+const tokenExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     request['token'] = authorization.substring(7)
@@ -42,5 +42,5 @@ module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  tokenProcessor
+  tokenExtractor
 }
