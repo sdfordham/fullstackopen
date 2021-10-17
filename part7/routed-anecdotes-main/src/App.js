@@ -3,6 +3,14 @@ import {
   Switch, Route, Link, useRouteMatch
 } from "react-router-dom"
 
+const Notification = ({ notification }) => {
+  return (
+    <div>
+      {notification}
+    </div>
+  )
+}
+
 const Anecdote = ({ anecdote }) => {
   return (
     <div>
@@ -61,6 +69,8 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.setNotification('a new anecdote ' + content + ' created!')
+    setTimeout(() => {props.setNotification(null)}, 10000)
   }
 
   return (
@@ -145,7 +155,8 @@ const App = () => {
 
       <Switch>
         <Route path="/create new">
-          <CreateNew addNew={addNew} />
+          <CreateNew addNew={addNew} setNotification={setNotification} />
+          <Notification notification={notification} />
         </Route>
         <Route path="/about">
           <About />
