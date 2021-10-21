@@ -23,8 +23,6 @@ const App = () => {
     )
   }, [])
 
-  console.log(blogs)
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
@@ -144,13 +142,12 @@ const App = () => {
         <div>
           <p>{user.username} logged in.</p>
           <button type="submit" onClick={logoutUser}>logout</button>
-          <Togglable buttonLabel={'New note'} ref={blogFormRef}>
+          <Togglable labelNotVis={'new blog'} labelVis={'cancel'} ref={blogFormRef}>
             {blogForm()}
           </Togglable>
-          <BlogList blogs={blogs}/>
+          <BlogList blogs={blogs} setBlogs={setBlogs} user={user}/>
         </div>}
     </div>
   )
 }
-
 export default App

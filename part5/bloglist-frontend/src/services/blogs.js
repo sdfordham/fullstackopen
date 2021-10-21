@@ -20,4 +20,14 @@ const create = async newObject => {
   return response.data
 }
 
-export default { getAll, setToken, create }
+const addLike = (id, likes) => {
+  const request = axios.patch(baseUrl + '/' + id, {likes: likes})
+  return request.then(response => response.data)
+}
+
+const deleteBlog = (id) => {
+  const request = axios.delete(baseUrl + '/' + id)
+  return request.then(response => response.data)
+}
+
+export default { getAll, setToken, create, addLike, deleteBlog }
