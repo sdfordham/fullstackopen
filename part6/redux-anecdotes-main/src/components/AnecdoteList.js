@@ -4,7 +4,7 @@ import { addLike } from '../reducers/anecdoteReducer'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => state.anecdotes)
 
   const handleVote = (id) => {
     dispatch(addLike(id))
