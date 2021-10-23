@@ -1,13 +1,18 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addLike } from '../reducers/anecdoteReducer'
+import { setMessage, clearMessage } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(state => state.anecdotes)
 
-  const handleVote = (id) => {
+  const handleVote = (id, content) => {
     dispatch(addLike(id))
+    dispatch(setMessage(`you voted '${content}'`))
+    setTimeout(() => {
+      dispatch(clearMessage())
+    }, 5000)
   }
 
   return (
@@ -20,7 +25,7 @@ const AnecdoteList = () => {
             </div>
             <div>
               has {anecdote.votes}
-              <button onClick={() => handleVote(anecdote.id)}>vote</button>
+              <button onClick={() => handleVote(anecdote.id, anecdote.content)}>vote</button>
             </div>
           </div>
         )
