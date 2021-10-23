@@ -23,10 +23,12 @@ const reducer = (state = initialState, action) => {
   console.log(action)
   switch (action.type) {
     case 'ADD_LIKE':
-      const [anecdote] = state.filter(s => s.id === action.data.id)
-      const others = state.filter(s => s.id != action.data.id)
-      const {votes, ...rest} = anecdote
-      return others.concat({votes: votes + 1, ...rest})
+      const newState = state.map(a =>
+        a.id === action.data.id
+          ? { ...a, votes: a.votes + 1 }
+          : a
+      )
+      return newState
     default: return state
   }
 }
