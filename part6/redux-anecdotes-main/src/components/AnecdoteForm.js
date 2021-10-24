@@ -8,10 +8,9 @@ const AnecdoteForm = () => {
 
   const handleAddAnecdote = async (event) => {
     event.preventDefault()
-    const content = event.target.create.value
+    const anecdote = event.target.create.value
     event.target.create.value = ''
-    const newAnecdote = await anecdoteService.createNew(content)
-    dispatch(addAnecdote(newAnecdote))
+    dispatch(addAnecdote(anecdote))
   }
 
   return (

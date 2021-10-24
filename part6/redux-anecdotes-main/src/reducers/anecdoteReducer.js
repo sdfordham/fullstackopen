@@ -33,10 +33,13 @@ export const addLike = (id) => {
   }
 }
 
-export const addAnecdote = (anecdote) => {
-  return {
-    type: 'ADD_ANECDOTE',
-    anecdote
+export const addAnecdote = (content) => {
+  return async dispatch => {
+    const anecdote = await anecdotesService.createNew(content)
+    dispatch({
+      type: 'ADD_ANECDOTE',
+      anecdote
+    })
   }
 }
 
