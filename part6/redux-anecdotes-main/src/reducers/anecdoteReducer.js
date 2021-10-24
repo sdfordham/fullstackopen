@@ -1,37 +1,42 @@
+import anecdotesService from '../services/anecdotes'
+
 const anecdoteReducer = (state = [], action) => {
   switch (action.type) {
     case 'INIT_ANECDOTES':
-      return action.data.anecdotes
+      return action.anecdotes
     case 'ADD_LIKE':
       return state.map(a =>
-        a.id === action.data.id
+        a.id === action.id
           ? { ...a, votes: a.votes + 1 }
           : a
       )
     case 'ADD_ANECDOTE':
-      return state.concat(action.data.content)
+      return state.concat(action.anecdote)
     default: return state
   }
 }
 
-export const initAnecdotes = (anecdotes) => {
-  return {
-    type: 'INIT_ANECDOTES',
-    data: { anecdotes }
+export const initAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdotesService.getAll()
+    dispatch({
+      type: 'INIT_ANECDOTES',
+      anecdotes,
+    })
   }
 }
 
 export const addLike = (id) => {
   return {
     type: 'ADD_LIKE',
-    data: { id }
+    id
   }
 }
 
-export const addAnecdote = (content) => {
+export const addAnecdote = (anecdote) => {
   return {
     type: 'ADD_ANECDOTE',
-    data: { content }
+    anecdote
   }
 }
 
