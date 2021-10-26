@@ -4,7 +4,7 @@ import Togglable from '../components/Togglable'
 
 export const BlogList = ({ blogs, setBlogs, user }) => {
   return (
-    <div>
+    <div id="blog-list">
       {blogs.sort((a, b) => b.likes - a.likes)
         .map(blog =>
           <Blog
@@ -42,17 +42,18 @@ export const Blog = ({ blog, setBlogs, user }) => {
   }
 
   const blogExtraRef = useRef()
+  console.log(blog)
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author}
       <Togglable labelNotVis={'view'} labelVis={'hide'} ref={blogExtraRef}>
-        <p>{blog.url}</p>
-        <p>
-          likes: {blog.likes}
+        <div>{blog.url}</div>
+        <div>
+          likes: <span className="likes">{blog.likes}</span>
           <button type="submit" onClick={handleLike}>like</button>
-        </p> 
-        <p>{'user' in blog ? blog.user.username : user.username}</p>
-        {(user.username === blog.user.username) && <button type="submit"
+        </div> 
+        <div>{'user' in blog ? blog.user.username : user.username}</div>
+        {(('user' in blog) && (user.username === blog.user.username)) && <button type="submit"
           onClick={handleDelete}>remove</button>}
       </Togglable>
     </div>

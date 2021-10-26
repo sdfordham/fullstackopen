@@ -10,6 +10,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
   const [newBlogTitle, setNewBlogTitle] = useState('')
@@ -24,7 +25,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -38,12 +39,12 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
-      setErrorMessage('Successfully logged in.')
+      setSuccessMessage('Successfully logged in.')
       setTimeout(() => {
-        setErrorMessage(null)
+        setSuccessMessage(null)
       }, 5000)
       window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
+        'loggedBloglistappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
       setUser(user)
@@ -67,9 +68,9 @@ const App = () => {
     }
     try {
       await blogService.create(newBlog)
-      setErrorMessage(`A new blog ${newBlog.title} by ${newBlog.author} was added.`)
+      setSuccessMessage(`A new blog ${newBlog.title} by ${newBlog.author} was added.`)
       setTimeout(() => {
-        setErrorMessage(null)
+        setSuccessMessage(null)
       }, 5000)
 
       setBlogs([...blogs, newBlog])
@@ -77,9 +78,9 @@ const App = () => {
       setNewBlogAuthor('')
       setNewBlogURL('')
       blogFormRef.current.toggleVisibility()
-      setErrorMessage('New blog added.')
+      setSuccessMessage('New blog added.')
       setTimeout(() => {
-        setErrorMessage(null)
+        setSuccessMessage(null)
       }, 5000)
     } catch (exception) {
       setErrorMessage('Couldnt add that blog.')
@@ -109,15 +110,15 @@ const App = () => {
       <h2>Create new</h2>
       <form onSubmit={handleAddBlog}>
         <div>
-          Title: <input value={newBlogTitle} onChange={handleTitleChange} />
+          Title: <input id="new-blog-title" value={newBlogTitle} onChange={handleTitleChange} />
         </div>
         <div>
-          Author: <input value={newBlogAuthor} onChange={handleAuthorChange} />
+          Author: <input id="new-blog-author" value={newBlogAuthor} onChange={handleAuthorChange} />
         </div>
         <div>
-          URL: <input value={newBlogURL} onChange={handleURLChange} />
+          URL: <input id="new-blog-url" value={newBlogURL} onChange={handleURLChange} />
         </div>
-        <button type="submit">create</button>
+        <button id="button-create-blog" type="submit">create</button>
       </form>
     </div>
   )
@@ -125,7 +126,7 @@ const App = () => {
 
   const logoutUser = (event) => {
     event.preventDefault()
-    window.localStorage.removeItem('loggedNoteappUser')
+    window.localStorage.removeItem('loggedBloglistappUser')
     blogService.setToken(null)
     setUser(null)
   }
@@ -133,7 +134,8 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
-      <Notification message={errorMessage}/>
+      <Notification message={successMessage} type="success"/>
+      <Notification message={errorMessage} type="error"/>
       {user === null ? <Loginform username={username}
         password={password}
         setUsername={setUsername}

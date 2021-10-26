@@ -1,0 +1,6 @@
+{
+    "restructuredtext.confPath": "",
+    "files.watcherExclude": {
+        "**/target": true
+    }
+}
