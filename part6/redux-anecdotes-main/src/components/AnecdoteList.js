@@ -12,12 +12,9 @@ const AnecdoteList = () => {
     anecdote.content.toLowerCase().includes(filter.toLowerCase())
   )
 
-  const handleVote = (id, content) => {
-    dispatch(addLike(id))
-    dispatch(setMessage(`you voted '${content}'`))
-    setTimeout(() => {
-      dispatch(clearMessage())
-    }, 5000)
+  const handleVote = (anecdote) => {
+    dispatch(addLike(anecdote.id, anecdote.votes))
+    dispatch(setMessage(`you voted '${anecdote.content}'`, 5000))
   }
 
   return (
@@ -30,7 +27,7 @@ const AnecdoteList = () => {
             </div>
             <div>
               has {anecdote.votes}
-              <button onClick={() => handleVote(anecdote.id, anecdote.content)}>vote</button>
+              <button onClick={() => handleVote(anecdote)}>vote</button>
             </div>
           </div>
         )

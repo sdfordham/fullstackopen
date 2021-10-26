@@ -6,8 +6,8 @@ const anecdoteReducer = (state = [], action) => {
       return action.anecdotes
     case 'ADD_LIKE':
       return state.map(a =>
-        a.id === action.id
-          ? { ...a, votes: a.votes + 1 }
+        a.id === action.data.id
+          ? { ...a, votes: action.data.currentLikes + 1 }
           : a
       )
     case 'ADD_ANECDOTE':
@@ -26,10 +26,13 @@ export const initAnecdotes = () => {
   }
 }
 
-export const addLike = (id) => {
-  return {
-    type: 'ADD_LIKE',
-    id
+export const addLike = (id, currentLikes) => {
+  return async dispatch => {
+    const res = await anecdotesService.addLike(id, currentLikes)
+    dispatch({
+      type: 'ADD_LIKE',
+      data: { id, currentLikes}
+    })
   }
 }
 

@@ -13,4 +13,10 @@ const createNew = async (content) => {
   return response.data
 }
 
-export default { getAll, createNew }
+const addLike = async (id, currentLikes) => {
+  const object = {votes: currentLikes + 1}
+  const response = await axios.patch(baseUrl + '/' + id, object)
+  return response.data
+}
+
+export default { getAll, createNew, addLike }
