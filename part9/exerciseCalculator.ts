@@ -47,6 +47,6 @@ try {
   let errorMessage = 'Something bad happened.';
   if(error instanceof Error) {
     errorMessage += ' Error: ' + error.message;
-  };
+  }
   console.log(errorMessage);
-};
+}
