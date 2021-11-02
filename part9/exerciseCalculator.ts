@@ -30,4 +30,23 @@ const calculateExercises = (dailyHours: Array<number>): exerciseSummary => {
   };
 };
 
-console.log(calculateExercises([1, 0, 0, 0.5, 0, 0, 0]));
+const parseExerciseArgs = (args: Array<string>): Array<number> => {
+  if (args.length <= 2) throw new Error('Not enough arguments');
+  for (let i = 2; i < args.length; i++) {
+    if (isNaN(Number(args[i]))) {
+      throw new Error('Arguments must be numbers');
+    }
+  }
+  return args.slice(2).map(a => Number(a));
+};
+
+try {
+  const v = parseExerciseArgs(process.argv);
+  console.log(calculateExercises(v));
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened.';
+  if(error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  };
+  console.log(errorMessage);
+};
