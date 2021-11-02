@@ -1,5 +1,3 @@
-const target = 2;
-
 interface exerciseSummary {
     periodLength: number,
     trainingDays: number,
@@ -10,7 +8,7 @@ interface exerciseSummary {
     average: number
 }
 
-const calculateExercises = (dailyHours: Array<number>): exerciseSummary => {
+const calculateExercises = (dailyHours: Array<number>, target: number): exerciseSummary => {
   const periodLength = dailyHours.length;
   const trainingDays = dailyHours.reduce( (a, b) => b > 0 ? a + 1 : a, 0);
   const total = dailyHours.reduce( (a, b) => a + b, 0);
@@ -41,8 +39,9 @@ const parseExerciseArgs = (args: Array<string>): Array<number> => {
 };
 
 try {
+  const target = 2;
   const v = parseExerciseArgs(process.argv);
-  console.log(calculateExercises(v));
+  console.log(calculateExercises(v, target));
 } catch (error: unknown) {
   let errorMessage = 'Something bad happened.';
   if(error instanceof Error) {
@@ -50,3 +49,4 @@ try {
   }
   console.log(errorMessage);
 }
+ export default calculateExercises;
