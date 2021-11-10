@@ -1,6 +1,6 @@
 import express from 'express';
 const diagnosesRouter = express.Router();
-import diagnosesData from './json/diagnoses.json';
+import diagnosesData from '../json/diagnoses.json';
 import { Diagnoses } from '../types';
 
 const diagnoses: Array<Diagnoses> = diagnosesData;

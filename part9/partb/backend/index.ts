@@ -1,8 +1,10 @@
 import express from 'express';
 const diagnosesRouter = require('./routes/diagnoses');
 const patientsRouter = require('./routes/patients')
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const PORT = 3001;
