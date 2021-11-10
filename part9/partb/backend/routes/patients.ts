@@ -13,8 +13,16 @@ patientsRouter.get('/', async (_request, response) => {
 
 patientsRouter.post('/', async (_request, response) => {
   const { name, dateOfBirth, gender, occupation, ssn } = _request.body;
-  const newPatient = addPatient({ name, dateOfBirth, gender, occupation, ssn })
-  response.json(newPatient);
-}); 
+  try {
+    const newPatient = addPatient({ name, dateOfBirth, gender, occupation, ssn })
+    response.json(newPatient);
+  }  catch (error: unknown) {
+    let errorMessage = 'Error: '
+    if(error instanceof Error) {
+      errorMessage += error.message;
+    }
+    response.status(400).send(errorMessage);
+  }
+})
 
 module.exports = patientsRouter;

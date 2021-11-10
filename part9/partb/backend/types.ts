@@ -21,4 +21,16 @@ export interface NonSensitivePatient {
   occupation: string
 }
 
-export type NewPatient = Omit<Patient, 'id'>;
+export type NewPatient = {
+  name: unknown,
+  dateOfBirth: unknown,
+  gender: unknown,
+  occupation: unknown,
+  ssn: unknown
+};
+
+export enum Gender {
+  Male = 'male',
+  Female = 'female',
+  Other = 'other',
+};
