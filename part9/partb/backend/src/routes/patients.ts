@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import express from 'express';
 const router = express.Router();
 import patientService from '../services/patients';

@@ -1,9 +1,9 @@
 import express from 'express';
-const diagnosesRouter = express.Router();
+const router = express.Router();
 import diagnosesEntries from '../../data/diagnoses';
 
-diagnosesRouter.get('/', async (_request, response) => {
+router.get('/', async (_request, response) => {
   response.json(diagnosesEntries);
 });
 
-module.exports = diagnosesRouter;
+module.exports = router;
